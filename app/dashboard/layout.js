@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 const sidebarLinks = [
   { href: '/dashboard', label: 'Overview', icon: '📊' },
@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="dashboard-layout">
-      <aside className="dashboard-sidebar">
+      <aside className="dashboard-sidebar" style={{ display: 'flex', flexDirection: 'column' }}>
         <div className="dashboard-sidebar-header">
           <div className="dashboard-avatar">
             {session?.user?.name?.charAt(0)?.toUpperCase() || '?'}
@@ -27,7 +27,7 @@ export default function DashboardLayout({ children }) {
             <p className="dashboard-name">{session?.user?.name || 'User'}</p>
           </div>
         </div>
-        <nav className="dashboard-nav">
+        <nav className="dashboard-nav" style={{ flex: 1 }}>
           {sidebarLinks.map(link => (
             <Link
               key={link.href}
@@ -39,6 +39,16 @@ export default function DashboardLayout({ children }) {
             </Link>
           ))}
         </nav>
+        
+        <div style={{ padding: '16px', borderTop: '1px solid var(--border)' }}>
+          <button 
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="dashboard-nav-item" 
+            style={{ width: '100%', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', color: 'var(--danger)' }}
+          >
+            <span>🚪</span> Logout
+          </button>
+        </div>
       </aside>
       <div className="dashboard-main">
         <header className="dashboard-topbar" style={{ 

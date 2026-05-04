@@ -45,13 +45,26 @@ export default function BookDetailPage() {
 
   const submitReview = async () => {
     if (!session) { router.push('/login'); return; }
-    const res = await fetch(`/api/books/${id}/reviews`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user: session.user.name, userId: session.user.id, rating, comment }),
+    const res = await fetch('/api/books/review', {
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        bookId: id,
+        userName: session.user.name, 
+        userId: session.user.id, 
+        rating, 
+        comment 
+      }),
     });
     const data = await res.json();
-    if (data.success) { addToast('Review submitted!', 'success'); setShowReviewForm(false); setComment(''); setRating(5); fetch(`/api/books/${id}`).then(r => r.json()).then(d => { if (d.success) setBook(d.book); }); }
-    else addToast('Failed to submit review', 'error');
+    if (data.success) { 
+      addToast('Review submitted!', 'success'); 
+      setShowReviewForm(false); 
+      setComment(''); 
+      setRating(5); 
+      fetch(`/api/books/${id}`).then(r => r.json()).then(d => { if (d.success) setBook(d.book); }); 
+    }
+    else addToast(data.error || 'Failed to submit review', 'error');
   };
 
   if (loading) return <div className="container" style={{ padding: '80px 0', textAlign: 'center', color: 'var(--text-muted)' }}>Loading...</div>;
@@ -118,15 +131,25 @@ export default function BookDetailPage() {
             <button className="btn btn-primary" onClick={submitReview}>Submit Review</button>
           </div>
         )}
-        {book.reviews?.length > 0 ? book.reviews.map((review, i) => (
+        {book.reviews?.length > 0 ? [...book.reviews].reverse().map((review, i) => (
           <div key={i} className="review-item">
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <div><strong>{review.user}</strong><span style={{ color: 'var(--text-light)', fontSize: '12px', marginLeft: '12px' }}>{review.date ? new Date(review.date).toLocaleDateString() : ''}</span></div>
+              <div>
+                <strong style={{ fontSize: '15px' }}>{review.userName || 'Anonymous'}</strong>
+                <span style={{ color: 'var(--text-light)', fontSize: '12px', marginLeft: '12px' }}>
+                  {review.createdAt ? new Date(review.createdAt).toLocaleDateString() : 'Just now'}
+                </span>
+              </div>
               <StarRating value={review.rating} readOnly size={16} />
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{review.comment}</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.5' }}>{review.comment}</p>
           </div>
-        )) : !showReviewForm && <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '32px' }}>No reviews yet. Be the first to review!</p>}
+        )) : !showReviewForm && (
+          <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '32px', display: 'block', marginBottom: '12px' }}>💬</span>
+            <p>No reviews yet. Be the first to share your thoughts!</p>
+          </div>
+        )}
       </div>
 
       <Modal isOpen={issueModal} onClose={() => setIssueModal(false)} title="Borrow Book" onConfirm={confirmIssue} confirmText="Confirm Borrow">
