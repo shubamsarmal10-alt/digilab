@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 DigiLib+ | Advanced Digital Library Management System
 
-## Getting Started
+DigiLib+ is a premium, official-grade digital library management system designed for academic and professional environments. Built with a focus on robust database management (ADBMS) and a sophisticated user experience, it provides a seamless interface for managing books, users, and library transactions.
 
-First, run the development server:
+![Design Status](https://img.shields.io/badge/Design-Premium-blueviolet?style=for-the-badge)
+![Tech Stack](https://img.shields.io/badge/Stack-Next.js%20|%20MongoDB%20|%20NextAuth-black?style=for-the-badge)
 
+## ✨ Key Features
+
+### 🏢 Role-Based Architecture
+- **Admin Dashboard**: Real-time analytics, inventory management, user tracking, and unified activity logs.
+- **User Dashboard**: Personal borrow history, active loan tracking, and profile management.
+- **Secure Access**: Role-based redirection and route protection via Next.js Proxy/Middleware.
+
+### 📖 Library Management
+- **Smart Catalog**: Advanced search and category-wise filtering powered by MongoDB text indexes and regex.
+- **Inventory Locking**: Atomic updates to `availableQuantity` ensure no over-borrowing during high-concurrency requests.
+- **Chapter Explorer**: Navigate through book contents with a dedicated reading interface.
+
+### 💰 Intelligent Fine System
+- **Automated Penalties**: Built-in logic to calculate fines (₹3 per day) for overdue returns.
+- **User Notifications**: Transparent fine notices displayed directly in the return workflow.
+- **History Tracking**: Comprehensive "Reading History" showing every transaction, return date, and applied fine.
+
+### 📊 Advanced DBMS (ADBMS) Implementation
+- **Aggregation Pipelines**: Real-time dashboard stats and "Most Popular Books" rankings calculated via complex MongoDB `$group` and `$sort` stages.
+- **Data Integrity**: Transaction-safe inventory management using atomic operators (`$inc`).
+- **Soft Deletion**: Books are managed with an `isDeleted` flag to maintain referential integrity in transaction logs.
+
+---
+
+## 🚀 Tech Stack
+- **Frontend**: Next.js 15+ (App Router), Vanilla CSS (Custom Design Tokens)
+- **Backend**: Next.js API Routes, Node.js
+- **Database**: MongoDB Atlas
+- **Authentication**: NextAuth.js (JWT Strategy)
+- **Styling**: Premium Light & Classy theme with Glassmorphism and Outfit/Inter typography.
+
+---
+
+## 🛠️ Setup & Installation
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd digilab
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 3. Environment Variables
+Create a `.env.local` file in the root directory:
+```env
+MONGODB_URI=your_mongodb_atlas_connection_string
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Seed the Database
+Populate your database with initial admin and test users:
+```bash
+node scripts/seed-admin.js
+```
 
-## Learn More
+### 5. Run the Development Server
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔑 Default Credentials
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@digilib.com` | `admin123` |
+| **User** | `user@digilib.com` | `user123` |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎨 Design Philosophy
+DigiLib+ prioritizes **Visual Excellence**. Unlike generic library apps, it uses:
+- **Glassmorphism**: Blurred overlays and subtle transparency.
+- **Harmonious Palettes**: Slate and Cobalt tones for a professional, academic feel.
+- **Micro-animations**: Smooth transitions (`animate-fade-up`) for all page loads and state changes.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Developed as an Advanced Database Management System project.*
